@@ -13,19 +13,19 @@ function SideNav() {
     {
       id: 2,
       name: 'Create New',
-      path: 'dashboard/create-new',
+      path: '/dashboard/create-new',
       icon: FileVideo,
     },
     {
       id: 3,
       name: 'Upgrade',
-      path: '/upgrade',
+      path: '/dashboard/upgrade',
       icon: ShieldPlus,
     },
     {
       id: 4,
       name: 'Account',
-      path: '/account',
+      path: '/dashboard/account',
       icon: CircleUser,
     },
   ]
@@ -42,7 +42,7 @@ function SideNav() {
             <div
               className={`flex items-center gap-3 p-3 hover:bg-primary hover:text-white rounded-md
              cursor-pointer
-             ${path == item.path && 'bg-primary text-white'}`}
+             ${path === item.path && 'bg-primary text-white'}`}
             >
               <item.icon />
               <h2>{item.name}</h2>

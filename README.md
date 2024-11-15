@@ -18,3 +18,9 @@ to tun the studio in the local machine
 
 remember when clerkMiddleware is not protected route
 bydefault all the route is public
+
+###
+
+Major changes
+1.- console.log not print---
+2.- path mismach http://localhost:3000/dashboard/dashboard/upgrade--solve by using = with other ==
