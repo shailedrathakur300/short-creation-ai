@@ -9,9 +9,11 @@ import {
 import { useState } from 'react'
 import { Textarea } from '../../../../components/ui/textarea'
 
-interface SelectTopicProps {}
+interface SelectTopicProps {
+  onUserSelect: (fieldName: string, fieldValue: string) => void
+}
 
-function SelectTopic({}: SelectTopicProps) {
+function SelectTopic({ onUserSelect }: SelectTopicProps) {
   const options = [
     'Custom Prompt',
     'Random AI Story',
@@ -26,7 +28,12 @@ function SelectTopic({}: SelectTopicProps) {
     <div>
       <h2 className="font-bold text-2xl text-primary">Content</h2>
       <p className="text-gray-500">What is the topic of your video</p>
-      <Select onValueChange={(value: string) => setSelectedOption(value)}>
+      <Select
+        onValueChange={(value: string) => {
+          setSelectedOption(value)
+          value !== 'Custom Prompt' && onUserSelect('topic', value)
+        }}
+      >
         <SelectTrigger className="w-full mt-2 p-6 text-lg">
           <SelectValue placeholder="Content Type" />
         </SelectTrigger>
@@ -44,6 +51,7 @@ function SelectTopic({}: SelectTopicProps) {
       {selectedOption === 'Custom Prompt' && (
         <Textarea
           className="m-3"
+          onChange={(e) => onUserSelect('topic', e.target.value)}
           placeholder="Write prompt on which you want to create video"
         />
       )}
