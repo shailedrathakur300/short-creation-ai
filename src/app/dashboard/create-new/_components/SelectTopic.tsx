@@ -35,7 +35,7 @@ function SelectTopic({ onUserSelect }: SelectTopicProps) {
         }}
       >
         <SelectTrigger className="w-full mt-2 p-6 text-lg">
-          <SelectValue placeholder="Content Type" />
+          <SelectValue placeholder="Topic" />
         </SelectTrigger>
         <SelectContent>
           {options.map((item) => (

@@ -20,11 +20,11 @@ function SelectDuration({ onUserSelect }: SelectTopicProps) {
       <p className="text-gray-500">How long do you want to create video</p>
       <Select
         onValueChange={(value: string) => {
-          value !== 'Custom Prompt' && onUserSelect('topic', value)
+          value !== 'Custom Prompt' && onUserSelect('duration', value)
         }}
       >
         <SelectTrigger className="w-full mt-2 p-6 text-lg">
-          <SelectValue placeholder="Content Type" />
+          <SelectValue placeholder="Duration" />
         </SelectTrigger>
         <SelectContent>
           <SelectItem
