@@ -2,12 +2,15 @@
 import axios from 'axios'
 import { useState } from 'react'
 import { Button } from '../../../components/ui/button'
+import CustomLoading from './_components/CustomLoading'
 import SelectDuration from './_components/SelectDuration'
 import SelectStyle from './_components/SelectStyle'
 import SelectTopic from './_components/SelectTopic'
 
 function CreateNew() {
   const [formData, setFormData] = useState<any>({})
+  const [loading, setLoading] = useState<boolean>(false)
+  const [videoScript, setVideoScript] = useState<any>({})
   const OnHandleInputChange = (fieldName: string, fieldvalue: string) => {
     console.log(fieldName, fieldvalue)
 
@@ -20,6 +23,7 @@ function CreateNew() {
 
   //Get Video Script
   const GetvideoScript = async () => {
+    setLoading(true)
     const prompt = `write a script to generate ${formData.duration} video on topic:- ${formData.topic}  along with ai image prompt in ${formData.imageStyle}formate for each scene  give me result in JSON format with imagePrompt and contentText as field, No Plain text `
 
     console.log(prompt)
@@ -28,9 +32,11 @@ function CreateNew() {
         prompt: prompt,
       })
       .then((resp) => {
-        console.log(resp.data)
+        console.log(resp.data.result)
+        setVideoScript(resp.data.result)
       })
     console.log(result)
+    setLoading(false)
   }
   return (
     <div className="md:px-20">
@@ -53,6 +59,7 @@ function CreateNew() {
           Create Short Video
         </Button>
       </div>
+      <CustomLoading loading={loading} />
     </div>
   )
 }

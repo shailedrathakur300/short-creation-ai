@@ -14,6 +14,10 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={outfit.className}>
+          <link
+            rel="icon"
+            href="/logo.svg"
+          />
           <Provider>{children}</Provider>
         </body>
       </html>
