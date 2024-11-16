@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import SelectStyle from './_components/SelectStyle'
 import SelectTopic from './_components/SelectTopic'
 
 function CreateNew() {
@@ -16,7 +17,7 @@ function CreateNew() {
         {/* Select Topic */}
         <SelectTopic onUserSelect={OnHandleInputChange} />
         {/* Select Style*/}
-
+        <SelectStyle onUserSelect={OnHandleInputChange} />
         {/* Select Duration */}
 
         {/* Create Button */}

@@ -22,5 +22,5 @@ bydefault all the route is public
 ###
 
 Major changes
-1.- console.log not print---
+1.- console.log not print---its is Browser console issue
 2.- path mismach http://localhost:3000/dashboard/dashboard/upgrade--solve by using = with other ==
