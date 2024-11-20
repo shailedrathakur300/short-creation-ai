@@ -60,8 +60,10 @@ export async function POST(req: NextRequest) {
 
 /* ----------------------------****------------------------------- */
 // For unreal speech api working
+import fs from 'fs'
+import fetch from 'node-fetch'
+import path from 'path'
 import UnrealSpeech from 'unrealspeech'
-
 const unrealSpeech = new UnrealSpeech(process.env.UNREAL_API_KEY!)
 
 interface SpeechRequest {
@@ -74,11 +76,39 @@ export async function POST(req: Request): Promise<Response> {
     const { text, id }: SpeechRequest = await req.json()
     const speechData = await unrealSpeech.speech(text)
 
-    // Use the synthesized speech data as needed
-    console.log(speechData)
+    // Fetch the audio file from OutputUri
+    const response = await fetch(speechData.OutputUri)
+    if (!response.ok) {
+      throw new Error(`Failed to fetch audio: ${response.statusText}`)
+    }
 
-    // Respond with something meaningful, it can be any response based on your needs
-    return new Response(JSON.stringify(speechData), { status: 200 })
+    // Convert audio content to a buffer
+    const audioBuffer = await response.arrayBuffer()
+
+    // Define the path to save the audio file locally
+    const outputDirectory = path.join(process.cwd(), 'src/audios')
+    const outputFilePath = path.join(outputDirectory, `${id}.mp3`)
+
+    // Ensure the directory exists
+    if (!fs.existsSync(outputDirectory)) {
+      fs.mkdirSync(outputDirectory, { recursive: true })
+    }
+
+    // Write the binary content to a local file
+    fs.writeFileSync(outputFilePath, Buffer.from(audioBuffer))
+
+    console.log(`Audio file successfully written to: ${outputFilePath}`)
+
+    // Respond with something meaningful
+    return new Response(
+      JSON.stringify({
+        message: 'Audio file saved successfully',
+        filePath: outputFilePath,
+      }),
+      {
+        status: 200,
+      },
+    )
   } catch (error) {
     console.error('Error processing request:', error)
     return new Response('Internal server error', { status: 500 })
