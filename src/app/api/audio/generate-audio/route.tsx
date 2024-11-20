@@ -1,3 +1,4 @@
+//Google text to speech work
 /* import textToSpeech, { protos } from '@google-cloud/text-to-speech'
 import fs from 'fs'
 import { NextResponse } from 'next/server'
@@ -31,37 +32,55 @@ export async function POST(req: Request) {
 }
  */
 
-import fs from 'fs'
-import { NextResponse } from 'next/server'
+/* -----------------------------*********------------------------------ */
+// For playht api but not working
+
+/* import { NextRequest } from 'next/server'
 import * as PlayHT from 'playht'
 
-// Initialize PlayHT client with user credentials.
+// Initialize client
 PlayHT.init({
-  userId: process.env.VOICE_USER_KEY || '', // Provide empty string as fallback
-  apiKey: process.env.VOICE_API_KEY || '', // Provide empty string as fallback
+  userId: process.env.PLAYHT_USER_ID || '', // Provide empty string fallback to fix type error
+  apiKey: process.env.PLAYHT_API_KEY || '', // Provide empty string fallback to fix type error
+  defaultVoiceId:
+    's3://peregrine-voices/oliver_narrative2_parrot_saad/manifest.json',
+  defaultVoiceEngine: 'Play3.0-mini',
 })
 
-// Function to handle POST requests and generate audio.
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
+  const { text, id } = await req.json()
+  const generated = await PlayHT.generate(text)
+
+  // Grab the generated file URL
+  const { audioUrl } = generated
+
+  console.log('The url for the audio file is', audioUrl)
+}
+ */
+
+/* ----------------------------****------------------------------- */
+// For unreal speech api working
+import UnrealSpeech from 'unrealspeech'
+
+const unrealSpeech = new UnrealSpeech(process.env.UNREAL_API_KEY!)
+
+interface SpeechRequest {
+  text: string
+  id: string
+}
+
+export async function POST(req: Request): Promise<Response> {
   try {
-    // Parse the incoming JSON body for text input.
-    const { text } = await req.json()
+    const { text, id }: SpeechRequest = await req.json()
+    const speechData = await unrealSpeech.speech(text)
 
-    // Start streaming the audio from PlayHT.
-    const stream = await PlayHT.stream(text, { voiceEngine: 'Play3.0-mini' })
+    // Use the synthesized speech data as needed
+    console.log(speechData)
 
-    // Create or overwrite 'output.mp3' with the audio chunks.
-    stream.on('data', (chunk) => {
-      fs.appendFileSync('output.mp3', chunk)
-    })
-
-    // Return a success response after the stream ends.
-    return NextResponse.json({ result: 'Audio generation successful!' })
+    // Respond with something meaningful, it can be any response based on your needs
+    return new Response(JSON.stringify(speechData), { status: 200 })
   } catch (error) {
-    console.error('Error generating audio:', error)
-    return NextResponse.json(
-      { result: 'Failed to generate audio', error },
-      { status: 500 },
-    )
+    console.error('Error processing request:', error)
+    return new Response('Internal server error', { status: 500 })
   }
 }

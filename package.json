@@ -19,6 +19,7 @@
     "@radix-ui/react-alert-dialog": "^1.1.2",
     "@radix-ui/react-select": "^2.1.2",
     "@radix-ui/react-slot": "^1.1.0",
+    "assemblyai": "^4.8.0",
     "axios": "^1.7.7",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
@@ -33,6 +34,7 @@
     "styled-components": "^6.1.13",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
+    "unrealspeech": "^1.8.6",
     "uuid": "^11.0.3"
   },
   "devDependencies": {
