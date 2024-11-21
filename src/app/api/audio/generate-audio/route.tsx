@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
 
 /* ----------------------------****------------------------------- */
 // For unreal speech api working
-import fs from 'fs'
+/* import fs from 'fs'
 import fetch from 'node-fetch'
 import path from 'path'
 import UnrealSpeech from 'unrealspeech'
@@ -109,6 +109,32 @@ export async function POST(req: Request): Promise<Response> {
         status: 200,
       },
     )
+  } catch (error) {
+    console.error('Error processing request:', error)
+    return new Response('Internal server error', { status: 500 })
+  }
+}
+ */
+
+import UnrealSpeech from 'unrealspeech'
+
+const unrealSpeech = new UnrealSpeech(process.env.UNREAL_API_KEY!)
+
+interface SpeechRequest {
+  text: string
+  id: string
+}
+
+export async function POST(req: Request): Promise<Response> {
+  try {
+    const { text, id }: SpeechRequest = await req.json()
+    const speechData = await unrealSpeech.speech(text)
+
+    // Use the synthesized speech data as needed
+    console.log(speechData)
+
+    // Respond with something meaningful, it can be any response based on your needs
+    return new Response(JSON.stringify(speechData), { status: 200 })
   } catch (error) {
     console.error('Error processing request:', error)
     return new Response('Internal server error', { status: 500 })
