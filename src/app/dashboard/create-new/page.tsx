@@ -90,7 +90,7 @@ function CreateNew() {
       })
       .then((resp) => {
         console.log(resp.data.result)
-        setCaption(resp.data.result)
+        setCaption(resp?.data?.result)
       })
 
     setLoading(false)
