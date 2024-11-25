@@ -5,6 +5,7 @@ import { uuid } from 'drizzle-orm/pg-core'
 import { useState } from 'react'
 import { Button } from '../../../components/ui/button'
 import CustomLoading from './_components/CustomLoading'
+import PlayerDialog from './_components/PlayerDialog'
 import SelectDuration from './_components/SelectDuration'
 import SelectStyle from './_components/SelectStyle'
 import SelectTopic from './_components/SelectTopic'
@@ -19,11 +20,12 @@ function CreateNew() {
   const [loading, setLoading] = useState<boolean>(false)
   const [videoScript, setVideoScript] = useState<ScriptItem[]>([])
   const [caption, setCaption] = useState<string>('')
-
+  const [playVideo, setPlayVideo] = useState<boolean>(false)
+  const [videoId, setVideoId] = useState<boolean>(false)
   const ScriptData = `Shailendra today some bad things morning `
   const FILEURL =
     'https://unreal-expire-in-90-days.s3-us-west-2.amazonaws.com/ccd1564b-798f-413c-a177-23d550c69a77-0.mp3'
-
+  const ImagePrompt = ` a woman is sitting on a bench with a dog`
   const OnHandleInputChange = (fieldName: string, fieldvalue: string) => {
     if (!fieldName || !fieldvalue) return
     console.log(fieldName, fieldvalue)
@@ -33,7 +35,8 @@ function CreateNew() {
   const onCreateClickHandler = () => {
     // GetvideoScript()
     // GenerateAudioFile(ScriptData)
-    GenerateAudioCaption(FILEURL)
+    // GenerateAudioCaption(FILEURL)
+    GenerateImage(ImagePrompt)
   }
 
   const GetvideoScript = async () => {
@@ -96,6 +99,18 @@ function CreateNew() {
     setLoading(false)
   }
 
+  const GenerateImage = async (imageprompt: string) => {
+    setLoading(true)
+    await axios
+      .post('/api/generate-image', {
+        prompt: imageprompt,
+      })
+      .then((resp) => {
+        console.log(resp.data.result)
+      })
+    setLoading(false)
+  }
+
   return (
     <div className="md:px-20">
       <h2 className="font-bold text-4xl text-primary text-center m-5 ">
@@ -113,6 +128,10 @@ function CreateNew() {
         </Button>
       </div>
       <CustomLoading loading={loading} />
+      <PlayerDialog
+        playVideo={playVideo}
+        videoId={videoId}
+      />
     </div>
   )
 }
